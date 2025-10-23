@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 
 
-public class SignUp extends JFrame {
+public class signUp extends JFrame {
 
     private JTextField email;
     private JTextField username;
@@ -23,7 +23,7 @@ public class SignUp extends JFrame {
     private JButton signInButton;
 
 
-    public SignUp() {
+    public signUp() {
 
         setTitle("Sign Up");
         setSize(400, 300);
@@ -89,7 +89,7 @@ public class SignUp extends JFrame {
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                Login loginFrame = new Login();
+                login loginFrame = new login();
                 loginFrame.setVisible(true);
                 dispose();
             } else {
@@ -123,7 +123,7 @@ public class SignUp extends JFrame {
     }
 
     public static void main(String[] args) {
-        new SignUp();
+        new signUp();
     }
 
 }

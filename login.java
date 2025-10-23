@@ -11,12 +11,12 @@ import javax.swing.JTextField;
 
 
 
-public class Login extends JFrame {
+public class login extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public Login() {
+    public login() {
         setTitle("Login");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,18 +55,18 @@ public class Login extends JFrame {
                 @Override
                 public void onSuccess(String email, String hashedPassword) {
                     if (verifyPassword(password, hashedPassword)) {
-                        JOptionPane.showMessageDialog(Login.this, "Login Successful!");
+                        JOptionPane.showMessageDialog(login.this, "Login Successful!");
                         Landing landingPage = new Landing();
                         dispose();
                         landingPage.setVisible(true);
                     } else {
-                        JOptionPane.showMessageDialog(Login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
 
                 @Override
                 public void onFailure(String error) {
-                    JOptionPane.showMessageDialog(Login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
         });
