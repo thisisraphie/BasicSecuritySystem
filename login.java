@@ -9,8 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-
-
 public class login extends JFrame {
 
     private JTextField usernameField;
@@ -37,7 +35,7 @@ public class login extends JFrame {
         panel.add(usernameField);
         panel.add(passwordLabel);
         panel.add(passwordField);
-        panel.add(new JLabel()); 
+        panel.add(new JLabel());
         panel.add(loginButton);
 
         add(panel, BorderLayout.CENTER);
@@ -46,15 +44,16 @@ public class login extends JFrame {
             String username = usernameField.getText().trim();
             String password = new String(passwordField.getPassword()).trim();
 
-            if (username.isEmpty() || password.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Please Enter a Username and Password", "Error", JOptionPane.ERROR_MESSAGE);
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a username and password.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
                 @Override
-                public void onSuccess(String email, String hashedPassword) {
-                    if (verifyPassword(password, hashedPassword)) {
+                public void onSuccess(String email, String storedHash) {
+                    String inputHash = hashPassword(password);
+                    if (inputHash.equals(storedHash)) {
                         JOptionPane.showMessageDialog(login.this, "Login Successful!");
                         Landing landingPage = new Landing();
                         dispose();
@@ -74,19 +73,19 @@ public class login extends JFrame {
         setVisible(true);
     }
 
-    private boolean verifyPassword(String password, String hashedPassword) {
-       try{
-        java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
-        byte[] hash  = digest.digest(password.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    private String hashPassword(String password) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash){
-            hexString.append(String.format("%02x", b));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return hexString.toString().equals(hashedPassword);
-       }catch(Exception e){
-        e.printStackTrace();
-        return false;
-       }
     }
 }

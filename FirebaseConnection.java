@@ -89,19 +89,24 @@ public class FirebaseConnection {
             if (response.contains("\"username\":\"" + username + "\"")) {
                 int userIndex = response.indexOf("\"username\":\"" + username + "\"");
 
-                int emailStart = response.lastIndexOf("\"email\":\"", userIndex) + 9;
-                int emailEnd = response.indexOf("\"", emailStart);
-                String email = response.substring(emailStart, emailEnd);
+                int objectStart = response.lastIndexOf("{", userIndex);
+                int objectEnd = response.indexOf("}", userIndex);
 
+                if (objectStart != -1 && objectEnd != -1) {
+                    String userJson = response.substring(objectStart, objectEnd + 1);
 
-                int passStart = response.indexOf("\"password\":\"", userIndex) + 12;
-                int passEnd = response.indexOf("\"", passStart);
-                String hashedPassword = response.substring(passStart, passEnd);
+                    int passStart = userJson.indexOf("\"password\":\"") + 12;
+                    int passEnd = userJson.indexOf("\"", passStart);
+                    String hashedPassword = userJson.substring(passStart, passEnd);
 
-                listener.onSuccess(username, hashedPassword);
+                    listener.onSuccess(username, hashedPassword);
+                } else {
+                    listener.onFailure("Invalid user data structure");
+                }
             } else {
                 listener.onFailure("User not found");
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
