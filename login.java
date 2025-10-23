@@ -56,7 +56,9 @@ public class Login extends JFrame {
                 public void onSuccess(String email, String hashedPassword) {
                     if (verifyPassword(password, hashedPassword)) {
                         JOptionPane.showMessageDialog(Login.this, "Login Successful!");
-                        //direct to landiing page lol
+                        Landing landingPage = new Landing();
+                        dispose();
+                        landingPage.setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(Login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
