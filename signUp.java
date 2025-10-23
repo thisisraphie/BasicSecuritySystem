@@ -13,7 +13,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
-public class signUp extends JFrame {
+
+public class SignUp extends JFrame {
 
     private JTextField email;
     private JTextField username;
@@ -22,7 +23,7 @@ public class signUp extends JFrame {
     private JButton signInButton;
 
 
-    public signUp() {
+    public SignUp() {
 
         setTitle("Sign Up");
         setSize(400, 300);
@@ -88,6 +89,9 @@ public class signUp extends JFrame {
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                Login loginFrame = new Login();
+                loginFrame.setVisible(true);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to send data. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -119,7 +123,7 @@ public class signUp extends JFrame {
     }
 
     public static void main(String[] args) {
-        new signUp();
+        new SignUp();
     }
 
 }

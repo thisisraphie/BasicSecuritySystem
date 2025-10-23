@@ -9,12 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class login extends JFrame {
+public class Login extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public login() {
+    public Login() {
         setTitle("Login");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
