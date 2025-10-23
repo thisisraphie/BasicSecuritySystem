@@ -13,15 +13,20 @@ public class login extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private mainMenu mainMenu;
+
+    public void setMainMenu(mainMenu mainMenu) {
+        this.mainMenu = mainMenu;
+    }
 
     public login() {
         setTitle("Login");
-        setSize(300, 150);
+        setSize(300, 180);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 20));
 
         JLabel usernameLabel = new JLabel("Username:");
         usernameField = new JTextField();
@@ -29,16 +34,24 @@ public class login extends JFrame {
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField();
 
+        JButton backButton = new JButton("Back");
         JButton loginButton = new JButton("Login");
 
         panel.add(usernameLabel);
         panel.add(usernameField);
         panel.add(passwordLabel);
         panel.add(passwordField);
-        panel.add(new JLabel());
+        panel.add(backButton);
         panel.add(loginButton);
 
         add(panel, BorderLayout.CENTER);
+
+        backButton.addActionListener(e -> {
+            if (mainMenu != null) {
+                mainMenu.setVisible(true);
+            }
+            dispose();
+        });
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
