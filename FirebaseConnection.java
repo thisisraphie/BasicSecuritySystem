@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.stream.Collectors;
+
 
 
 public class FirebaseConnection {
@@ -40,4 +44,49 @@ public class FirebaseConnection {
         }
     }
 
+    public interface OnUserFetchListener {
+        void onSuccess(String username, String hashedPassword);
+        void onFailure(String errorMessage);
+    }
+
+    public static void getUser(String username, OnUserFetchListener listener) {
+    new Thread(() -> {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) new URI(DATABASE_URL).toURL().openConnection();
+            conn.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String response = reader.lines().collect(Collectors.joining());
+            reader.close();
+            conn.disconnect();
+
+            if (response == null || response.equals("null") || response.isEmpty()) {
+                listener.onFailure("No users found");
+                return;
+            }
+
+            if (response.contains("\"username\":\"" + username + "\"")) {
+                int userIndex = response.indexOf("\"username\":\"" + username + "\"");
+
+                int emailStart = response.lastIndexOf("\"email\":\"", userIndex) + 9;
+                int emailEnd = response.indexOf("\"", emailStart);
+                String email = response.substring(emailStart, emailEnd);
+
+
+                int passStart = response.indexOf("\"password\":\"", userIndex) + 12;
+                int passEnd = response.indexOf("\"", passStart);
+                String hashedPassword = response.substring(passStart, passEnd);
+
+                listener.onSuccess(username, hashedPassword);
+            } else {
+                listener.onFailure("User not found");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure(e.getMessage());
+        }
+    }).start();
 }
+}
+
