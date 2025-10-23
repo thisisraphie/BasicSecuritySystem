@@ -44,6 +44,27 @@ public class FirebaseConnection {
         }
     }
 
+    public static boolean usernameExists(String username) {
+    try {
+        HttpURLConnection conn = (HttpURLConnection) new URI(DATABASE_URL).toURL().openConnection();
+        conn.setRequestMethod("GET");
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String response = reader.lines().collect(Collectors.joining());
+        reader.close();
+        conn.disconnect();
+
+        if (response == null || response.equals("null") || response.isEmpty()) {
+            return false;
+        }
+
+        return response.contains("\"username\":\"" + username + "\"");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     public interface OnUserFetchListener {
         void onSuccess(String username, String hashedPassword);
         void onFailure(String errorMessage);

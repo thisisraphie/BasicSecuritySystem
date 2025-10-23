@@ -82,10 +82,13 @@ public class signUp extends JFrame {
                 return;
             }
 
+            if (FirebaseConnection.usernameExists(usernameText)) {
+            JOptionPane.showMessageDialog(this, "Username already taken.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
 
             String hashedPassword = hashPassword(passwordText);
             boolean success = FirebaseConnection.sendData(emailText, usernameText, hashedPassword);
-
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
