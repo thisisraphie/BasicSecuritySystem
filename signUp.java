@@ -59,7 +59,7 @@ public class signUp extends JFrame {
         panel.add(username);
         panel.add(passwordLabel);
         panel.add(password);
-        panel.add(new JLabel("Password Strength:"));
+        panel.add(new JLabel(""));
         panel.add(passwordStrengthBar);
         panel.add(new JLabel(""));
         panel.add(strengthLabel);
@@ -100,6 +100,11 @@ public class signUp extends JFrame {
 
             if (!isValidEmail(emailText)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid email address.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (passwordText.length() < 4) {
+                JOptionPane.showMessageDialog(this, "Password must be at least 4 characters long.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
