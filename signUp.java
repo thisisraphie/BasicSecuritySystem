@@ -18,6 +18,7 @@ public class signUp extends JFrame {
     private JButton signInButton;
     private JButton backButton;
     private mainMenu mainMenu;
+    private Timer strengthUpdateTimer;
 
     public void setMainMenu(mainMenu mainMenu) {
         this.mainMenu = mainMenu;
@@ -73,17 +74,20 @@ public class signUp extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        strengthUpdateTimer = new Timer(300, e -> updateStrength());
+        strengthUpdateTimer.setRepeats(false);
+        
         password.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
-                updateStrength();
+                strengthUpdateTimer.restart();
             }
 
             public void removeUpdate(DocumentEvent e) {
-                updateStrength();
+                strengthUpdateTimer.restart();
             }
 
             public void changedUpdate(DocumentEvent e) {
-                updateStrength();
+                strengthUpdateTimer.restart();
             }
         });
 
