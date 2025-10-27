@@ -1,5 +1,13 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,25 +39,48 @@ public class login extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 20));
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
+
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 20)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(3, 52, 110));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
+                g2.dispose();
+            }
+        };
+        formPanel.setPreferredSize(new Dimension(600, 300));
+        formPanel.setOpaque(false);  
+        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 10, 20)); 
 
         JLabel usernameLabel = new JLabel("Username:");
-        usernameField = new JTextField();
-
+        usernameLabel.setForeground(Color.WHITE);
+        usernameLabel.setFont(labelFont);
+        JTextField usernameField = new JTextField();
+        usernameField.setFont(fieldFont);
         JLabel passwordLabel = new JLabel("Password:");
-        passwordField = new JPasswordField();
+        passwordLabel.setForeground(Color.WHITE);
+        passwordLabel.setFont(labelFont);
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setFont(fieldFont);
+        JButton backButton = new JButton("Back");
+        JButton loginButton = new JButton("Login");
 
-        backButton = new JButton("Back");
-        loginButton = new JButton("Login");
+        formPanel.add(usernameLabel);
+        formPanel.add(usernameField);
+        formPanel.add(passwordLabel);
+        formPanel.add(passwordField);
+        formPanel.add(backButton);
+        formPanel.add(loginButton);
 
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(backButton);
-        panel.add(loginButton);
-
+        panel.add(formPanel, new GridBagConstraints());
         add(panel, BorderLayout.CENTER);
 
         backButton.addActionListener(e -> {
