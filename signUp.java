@@ -26,7 +26,6 @@ public class signUp extends JFrame {
 
     public signUp() {
         setTitle("Sign Up");
-        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

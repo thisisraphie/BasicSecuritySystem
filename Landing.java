@@ -1,11 +1,10 @@
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -13,22 +12,38 @@ public class Landing extends JFrame {
 
     public Landing() {
         setTitle("Landing Page");
-        setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
-        ImageIcon cuteIcon = new ImageIcon("cute.jpg");
-        Image img = cuteIcon.getImage().getScaledInstance(600, 500, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(img);
-        JLabel imageLabel = new JLabel(scaledIcon);
-        add(imageLabel, BorderLayout.CENTER);
+         JPanel bgPanel = new JPanel() {
+            Image bg = new ImageIcon("assets/background.jpg").getImage();
 
-        JPanel bottomPanel = new JPanel(new GridLayout(1, 1, 10, 10));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        bgPanel.setLayout(new BorderLayout());
+        setContentPane(bgPanel);
 
-        JButton logoutButton = new JButton("Logout");
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        bottomPanel.setOpaque(false);
+
+        int barHeight = 60;
+    
+        ImageIcon logoutBtn = new ImageIcon("assets/logoutbtn.png");
+        Image scaled = logoutBtn.getImage().getScaledInstance(80, 40, Image.SCALE_SMOOTH);
+        JButton logoutButton = new JButton( new ImageIcon(scaled));
+        logoutButton.setContentAreaFilled(false);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setFocusPainted(false);
+        logoutButton.setBounds(30, getHeight() - barHeight + 15, 120, 50);
+
         bottomPanel.add(logoutButton);
-        add(bottomPanel, BorderLayout.SOUTH);
+        bgPanel.add(bottomPanel, BorderLayout.SOUTH);
+
 
         logoutButton.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(

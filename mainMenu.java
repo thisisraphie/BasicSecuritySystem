@@ -1,10 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.BorderFactory;
 
 public class mainMenu extends JFrame {
 
