@@ -15,65 +15,153 @@ public class signUp extends JFrame {
     private JPasswordField confirmPassword;
     private JProgressBar passwordStrengthBar;
     private JLabel strengthLabel;
-    private JButton signInButton;
+    private JButton SignUpBtn;
     private JButton backButton;
     private mainMenu mainMenu;
     private Timer strengthUpdateTimer;
+
 
     public void setMainMenu(mainMenu mainMenu) {
         this.mainMenu = mainMenu;
     }
 
     public signUp() {
-        setTitle("Sign Up");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    setTitle("Sign Up");
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    
 
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
+    Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
+    Font buttonFont = new Font("Segoe UI", Font.BOLD, 18);
 
-        JLabel emailLabel = new JLabel("Email:");
-        email = new JTextField();
+    JPanel mainPanel = new JPanel(new GridBagLayout()); 
+    mainPanel.setBackground(new Color(3, 52, 110));
 
-        JLabel usernameLabel = new JLabel("Username:");
-        username = new JTextField();
+    JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 20)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(3, 52, 110));
 
-        JLabel passwordLabel = new JLabel("Password:");
-        password = new JPasswordField();
+                int rectWidth = 600;
+                int rectHeight = 500;
 
-        passwordStrengthBar = new JProgressBar(0, 4);
-        passwordStrengthBar.setValue(0);
-        passwordStrengthBar.setStringPainted(false);
-        passwordStrengthBar.setForeground(Color.RED);
-        strengthLabel = new JLabel("Strength: Weak");
+                int x = (getWidth() - rectWidth) / 2;
+                int y = (getHeight() - rectHeight) / 2;
 
-        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-        confirmPassword = new JPasswordField();
+                g2.fillRoundRect(x, y, rectWidth, rectHeight, 40, 40);
+                g2.dispose();
+            }
+        };
 
-        signInButton = new JButton("Sign Up");
-        backButton = new JButton("Back");
+        formPanel.setPreferredSize(new Dimension(500, 300));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(200, 500, 150, 500));
+        formPanel.setOpaque(false);
 
-        panel.add(emailLabel);
-        panel.add(email);
-        panel.add(usernameLabel);
-        panel.add(username);
-        panel.add(passwordLabel);
-        panel.add(password);
-        panel.add(new JLabel(""));
-        panel.add(passwordStrengthBar);
-        panel.add(new JLabel(""));
-        panel.add(strengthLabel);
-        panel.add(confirmPasswordLabel);
-        panel.add(confirmPassword);
+    JLabel signUpLabel = new JLabel("Sign Up", SwingConstants.CENTER);
+    signUpLabel.setFont(new Font("Segoe UI", Font.BOLD, 40));
+    signUpLabel.setForeground(Color.WHITE);
+    signUpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout());
-        bottomPanel.add(backButton);
-        bottomPanel.add(signInButton);
 
-        add(panel, BorderLayout.CENTER);
+    JLabel emailLabel = new JLabel("Email:");
+    emailLabel.setFont(labelFont);
+    email = new JTextField();
+    email.setFont(fieldFont);
+    email.setPreferredSize(new Dimension(400, 25));
+    emailLabel.setForeground(Color.WHITE);
+    email.setCaretColor(Color.BLACK);
+    email.setOpaque(true);
+
+    JLabel usernameLabel = new JLabel("Username:");
+    usernameLabel.setFont(labelFont);
+    username = new JTextField();
+    username.setFont(fieldFont);
+    username.setPreferredSize(new Dimension(400, 25));
+    usernameLabel.setForeground(Color.WHITE);
+    username.setCaretColor(Color.BLACK);
+    username.setOpaque(true);
+
+    JLabel passwordLabel = new JLabel("Password:");
+    passwordLabel.setFont(labelFont);
+    password = new JPasswordField();
+    password.setFont(fieldFont);
+    password.setPreferredSize(new Dimension(400, 25));
+    passwordLabel.setForeground(Color.WHITE);
+    password.setCaretColor(Color.BLACK);
+    password.setOpaque(true);
+
+    passwordStrengthBar = new JProgressBar(0, 4);
+    passwordStrengthBar.setValue(0);
+    passwordStrengthBar.setStringPainted(false);
+    passwordStrengthBar.setPreferredSize(new Dimension(400, 10));
+    passwordStrengthBar.setForeground(Color.PINK);
+
+    strengthLabel = new JLabel("Strength: Weak");
+    strengthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+    strengthLabel.setForeground(Color.WHITE);
+
+    JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
+    confirmPasswordLabel.setFont(labelFont);
+    confirmPassword = new JPasswordField();
+    confirmPassword.setFont(fieldFont);
+    confirmPassword.setPreferredSize(new Dimension(400, 40));
+    confirmPasswordLabel.setForeground(Color.WHITE);
+    confirmPassword.setCaretColor(Color.BLACK);
+    confirmPassword.setOpaque(true);
+
+
+    ImageIcon SignUpBtn = new ImageIcon("assets/SignUpBtn.png");
+        Image scaled = SignUpBtn.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        JButton SignUpButton = new JButton( new ImageIcon(scaled));
+        SignUpButton.setContentAreaFilled(false);
+        SignUpButton.setBorderPainted(false);
+        SignUpButton.setFocusPainted(false);
+
+    ImageIcon backIcon = new ImageIcon("assets/ReturnBtn.png");
+        Image scaled2 = backIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        JButton backButton = new JButton(new ImageIcon(scaled2));
+        backButton.setContentAreaFilled(false);
+        backButton.setBorderPainted(false);
+        backButton.setFocusPainted(false);
+
+
+    formPanel.add(emailLabel);
+    formPanel.add(email);
+    formPanel.add(usernameLabel);
+    formPanel.add(username);
+    formPanel.add(passwordLabel);
+    formPanel.add(password);
+    formPanel.add(new JLabel(""));
+    formPanel.add(passwordStrengthBar);
+    formPanel.add(new JLabel(""));
+    formPanel.add(strengthLabel);
+    formPanel.add(confirmPasswordLabel);
+    formPanel.add(confirmPassword);
+
+    mainPanel.add(formPanel);
+    add(mainPanel);
+
+    JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
+    bottomPanel.add(backButton);
+    bottomPanel.add(SignUpButton);
+
+    JPanel container = new JPanel(new GridBagLayout());
+    container.add(formPanel);
+
+    add(formPanel, BorderLayout.CENTER);
+    add(bottomPanel, BorderLayout.SOUTH);
+
+
+
+        add(formPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        strengthUpdateTimer = new Timer(300, e -> updateStrength());
+        strengthUpdateTimer = new Timer(100, e -> updateStrength());
         strengthUpdateTimer.setRepeats(false);
         
         password.getDocument().addDocumentListener(new DocumentListener() {
@@ -90,7 +178,7 @@ public class signUp extends JFrame {
             }
         });
 
-        signInButton.addActionListener(e -> {
+        SignUpButton.addActionListener(e -> {
             String emailText = email.getText().trim();
             String usernameText = username.getText().trim();
             String passwordText = new String(password.getPassword());
@@ -151,15 +239,15 @@ public class signUp extends JFrame {
 
         switch (score) {
             case 0, 1 -> {
-                passwordStrengthBar.setForeground(Color.RED);
+                passwordStrengthBar.setForeground(new Color(224, 107, 128));
                 strengthLabel.setText("Strength: Weak");
             }
             case 2, 3 -> {
-                passwordStrengthBar.setForeground(Color.ORANGE);
+                passwordStrengthBar.setForeground(new Color(255, 231, 151));
                 strengthLabel.setText("Strength: Moderate");
             }
             case 4 -> {
-                passwordStrengthBar.setForeground(Color.GREEN);
+                passwordStrengthBar.setForeground(new Color (132, 153, 79));
                 strengthLabel.setText("Strength: Strong");
             }
         }
@@ -192,5 +280,6 @@ public class signUp extends JFrame {
             return password;
         }
     }
+
 
 }
