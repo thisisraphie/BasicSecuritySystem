@@ -1,24 +1,5 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.RenderingHints;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import javax.swing.*;
 
 public class login extends JFrame {
 
@@ -42,10 +23,17 @@ public class login extends JFrame {
         Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
         Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
 
+        // Background panel
+        JPanel bgPanel = new JPanel(new BorderLayout());
+        bgPanel.setBackground(Color.WHITE);
+        setContentPane(bgPanel);
+
+        // Centering panel
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 20)) {
+        // Form panel (blue rounded box)
+        JPanel formPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -56,32 +44,77 @@ public class login extends JFrame {
                 g2.dispose();
             }
         };
-        formPanel.setPreferredSize(new Dimension(600, 300));
-        formPanel.setOpaque(false);  
-        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 10, 20)); 
+        formPanel.setPreferredSize(new Dimension(650, 400));
+        formPanel.setOpaque(false);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+
+        // Title
+        JLabel loginLabel = new JLabel("Login", SwingConstants.CENTER);
+        loginLabel.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        loginLabel.setForeground(Color.WHITE);
+        formPanel.add(loginLabel, gbc);
+
+        // Username
+        gbc.gridy++;
+        gbc.gridwidth = 1;
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(labelFont);
-        JTextField usernameField = new JTextField();
+        formPanel.add(usernameLabel, gbc);
+
+        gbc.gridx = 1;
+        usernameField = new JTextField();
         usernameField.setFont(fieldFont);
+        usernameField.setPreferredSize(new Dimension(400, 30));
+        formPanel.add(usernameField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy++;
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(labelFont);
-        JPasswordField passwordField = new JPasswordField();
+        formPanel.add(passwordLabel, gbc);
+
+        gbc.gridx = 1;
+        passwordField = new JPasswordField();
         passwordField.setFont(fieldFont);
-        JButton backButton = new JButton("Back");
-        JButton loginButton = new JButton("Login");
+        passwordField.setPreferredSize(new Dimension(400, 30));
+        formPanel.add(passwordField, gbc);
 
-        formPanel.add(usernameLabel);
-        formPanel.add(usernameField);
-        formPanel.add(passwordLabel);
-        formPanel.add(passwordField);
-        formPanel.add(backButton);
-        formPanel.add(loginButton);
+        // Buttons
+        gbc.gridy++;
+        gbc.gridx = 0;
+        backButton = new JButton();
+        ImageIcon backIcon = new ImageIcon("assets/ReturnBtn.png");
+        Image scaledBack = backIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        backButton.setIcon(new ImageIcon(scaledBack));
+        styleButton(backButton);
+        formPanel.add(backButton, gbc);
 
-        panel.add(formPanel, new GridBagConstraints());
-        add(panel, BorderLayout.CENTER);
+        gbc.gridx = 1;
+        loginButton = new JButton();
+        ImageIcon loginIcon = new ImageIcon("assets/LoginBtn.png");
+        Image scaledLogin = loginIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        loginButton.setIcon(new ImageIcon(scaledLogin));
+        styleButton(loginButton);
+        formPanel.add(loginButton, gbc);
+
+        // Add form panel to main panel
+        GridBagConstraints mainGbc = new GridBagConstraints();
+        mainGbc.gridx = 0;
+        mainGbc.gridy = 0;
+        panel.add(formPanel, mainGbc);
+        bgPanel.add(panel, BorderLayout.CENTER);
+
 
         backButton.addActionListener(e -> {
             if (mainMenu != null) {
@@ -90,82 +123,79 @@ public class login extends JFrame {
             dispose();
         });
 
-        loginButton.addActionListener(e -> {
-            String username = usernameField.getText().trim();
-            String password = new String(passwordField.getPassword()).trim();
-
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter a username and password.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
-                @Override
-                public void onSuccess(String email, String storedHash) {
-                    String inputHash = hashPassword(password);
-                    if (inputHash.equals(storedHash)) {
-                        JOptionPane.showMessageDialog(login.this, "Login Successful!");
-                        failedAttempts = 0; //Reset counter
-                        Landing landingPage = new Landing();
-                        dispose();
-                        landingPage.setVisible(true);
-                    } else {
-                        JOptionPane.showMessageDialog(login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
-                        handleFailedLogin(); // Call the new failure method
-                    }
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    JOptionPane.showMessageDialog(login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
-                    handleFailedLogin(); // Call the new failure method
-                }
-            });
-        });
+        loginButton.addActionListener(e -> handleLogin());
 
         setVisible(true);
     }
 
-    // Method to handle failures
+    private void styleButton(JButton button) {
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+    }
+
+    private void handleLogin() {
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
+            @Override
+            public void onSuccess(String email, String storedHash) {
+                String inputHash = hashPassword(password);
+                if (inputHash.equals(storedHash)) {
+                    JOptionPane.showMessageDialog(login.this, "Login Successful!");
+                    failedAttempts = 0;
+                    Landing landingPage = new Landing();
+                    dispose();
+                    landingPage.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
+                    handleFailedLogin();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                JOptionPane.showMessageDialog(login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+                handleFailedLogin();
+            }
+        });
+    }
+
     private void handleFailedLogin() {
         failedAttempts++;
         if (failedAttempts >= 5) {
-            freezeUI(); // Freeze the screen
+            freezeUI();
         }
     }
 
-    // Method to freeze UI
     private void freezeUI() {
-        // 1. Disable all fields
         usernameField.setEnabled(false);
         passwordField.setEnabled(false);
         loginButton.setEnabled(false);
         backButton.setEnabled(false);
-        
-        // 2. Show a lock message
-        JOptionPane.showMessageDialog(login.this, 
-            "Too many failed attempts. Locked for 30 seconds.", 
-            "Locked", 
-            JOptionPane.WARNING_MESSAGE);
-            
-        // Create a Timer to unfreeze after 30 seconds (30000 milliseconds)
-        Timer unfreezeTimer = new Timer(30000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                unfreezeUI(); // Call the unfreeze method
-            }
-        });
-        unfreezeTimer.setRepeats(false); // Make sure it only runs once
+
+        JOptionPane.showMessageDialog(login.this,
+                "Too many failed attempts. Locked for 30 seconds.",
+                "Locked",
+                JOptionPane.WARNING_MESSAGE);
+
+        Timer unfreezeTimer = new Timer(30000, e -> unfreezeUI());
+        unfreezeTimer.setRepeats(false);
         unfreezeTimer.start();
     }
 
-    // method to unfreeze
     private void unfreezeUI() {
         usernameField.setEnabled(true);
         passwordField.setEnabled(true);
         loginButton.setEnabled(true);
         backButton.setEnabled(true);
-        failedAttempts = 0; // Reset the counter
+        failedAttempts = 0;
     }
 
     private String hashPassword(String password) {
