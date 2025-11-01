@@ -13,176 +13,203 @@ public class signUp extends JFrame {
     private JTextField username;
     private JPasswordField password;
     private JPasswordField confirmPassword;
+    private JPasswordField adminKeyField;
+    private JCheckBox adminCheckBox;
     private JProgressBar passwordStrengthBar;
     private JLabel strengthLabel;
     private JButton signUpButton;
     private JButton backButton;
     private mainMenu mainMenu;
     private Timer strengthUpdateTimer;
+    
+    // Ito ang secret key para sa admin registration
+    private static final String ADMIN_SECRET_KEY = "Admin123";
 
     public void setMainMenu(mainMenu mainMenu) {
         this.mainMenu = mainMenu;
     }
 
-   public signUp() {
-    setTitle("Sign Up");
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
+    public signUp() {
+        setTitle("Sign Up");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-    Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
-    Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
 
-    // Initialize components
-    email = new JTextField(20);
-    username = new JTextField(20);
-    password = new JPasswordField(20);
-    confirmPassword = new JPasswordField(20);
-    passwordStrengthBar = new JProgressBar(0, 4);
-    strengthLabel = new JLabel("Strength: Weak");
-    signUpButton = new JButton();
-    backButton = new JButton();
+        email = new JTextField(20);
+        username = new JTextField(20);
+        password = new JPasswordField(20);
+        confirmPassword = new JPasswordField(20);
+        adminKeyField = new JPasswordField(20);
+        adminCheckBox = new JCheckBox("Register as Admin");
+        passwordStrengthBar = new JProgressBar(0, 4);
+        strengthLabel = new JLabel("Strength: Weak");
+        signUpButton = new JButton();
+        backButton = new JButton();
 
-    // Background
-    JPanel bgPanel = new JPanel(new BorderLayout());
-    bgPanel.setBackground(Color.LIGHT_GRAY);
-    setContentPane(bgPanel);
+        JPanel bgPanel = new JPanel(new BorderLayout());
+        bgPanel.setBackground(Color.LIGHT_GRAY);
+        setContentPane(bgPanel);
 
-    // Center panel (white background)
-    JPanel mainPanel = new JPanel(new GridBagLayout());
-    mainPanel.setBackground(Color.WHITE);
-    bgPanel.add(mainPanel, BorderLayout.CENTER);
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(Color.WHITE);
+        bgPanel.add(mainPanel, BorderLayout.CENTER);
 
-    // Rounded blue form panel
-    JPanel formPanel = new JPanel(new GridBagLayout()) {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(3, 52, 110));
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
-            g2.dispose();
-        }
-    };
-    formPanel.setOpaque(false);
-    formPanel.setPreferredSize(new Dimension(700, 700));
-    formPanel.setBorder(BorderFactory.createEmptyBorder(50, 70, 50, 70));
+        JPanel formPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(3, 52, 110));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
+                g2.dispose();
+            }
+        };
+        formPanel.setOpaque(false);
+        formPanel.setPreferredSize(new Dimension(700, 800));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 70, 50, 70));
 
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.insets = new Insets(15, 10, 15, 10); // closer horizontal spacing
-    gbc.anchor = GridBagConstraints.WEST;
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.weightx = 1.0;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
-    // Title
-    JLabel signUpLabel = new JLabel("Sign Up", SwingConstants.CENTER);
-    signUpLabel.setFont(new Font("Segoe UI", Font.BOLD, 40));
-    signUpLabel.setForeground(Color.WHITE);
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.gridwidth = 2;
-    gbc.anchor = GridBagConstraints.CENTER;
-    formPanel.add(signUpLabel, gbc);
+        JLabel signUpLabel = new JLabel("Sign Up", SwingConstants.CENTER);
+        signUpLabel.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        signUpLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formPanel.add(signUpLabel, gbc);
 
-    gbc.gridwidth = 1;
-    gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
 
-    // --- EMAIL ---
-    JLabel emailLabel = new JLabel("Email:");
-    emailLabel.setFont(labelFont);
-    emailLabel.setForeground(Color.WHITE);
-    email.setFont(fieldFont);
-    email.setPreferredSize(new Dimension(450, 40)); // longer field
-    gbc.gridy = 1;
-    gbc.gridx = 0;
-    formPanel.add(emailLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(email, gbc);
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setFont(labelFont);
+        emailLabel.setForeground(Color.WHITE);
+        email.setFont(fieldFont);
+        email.setPreferredSize(new Dimension(450, 40));
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        formPanel.add(emailLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(email, gbc);
 
-    // --- USERNAME ---
-    JLabel usernameLabel = new JLabel("Username:");
-    usernameLabel.setFont(labelFont);
-    usernameLabel.setForeground(Color.WHITE);
-    username.setFont(fieldFont);
-    username.setPreferredSize(new Dimension(450, 40));
-    gbc.gridy = 2;
-    gbc.gridx = 0;
-    formPanel.add(usernameLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(username, gbc);
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(labelFont);
+        usernameLabel.setForeground(Color.WHITE);
+        username.setFont(fieldFont);
+        username.setPreferredSize(new Dimension(450, 40));
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        formPanel.add(usernameLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(username, gbc);
 
-    // --- PASSWORD ---
-    JLabel passwordLabel = new JLabel("Password:");
-    passwordLabel.setFont(labelFont);
-    passwordLabel.setForeground(Color.WHITE);
-    password.setFont(fieldFont);
-    password.setPreferredSize(new Dimension(450, 40));
-    gbc.gridy = 3;
-    gbc.gridx = 0;
-    formPanel.add(passwordLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(password, gbc);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(labelFont);
+        passwordLabel.setForeground(Color.WHITE);
+        password.setFont(fieldFont);
+        password.setPreferredSize(new Dimension(450, 40));
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        formPanel.add(passwordLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(password, gbc);
 
-    // Password Strength Bar
-    passwordStrengthBar.setValue(0);
-    passwordStrengthBar.setStringPainted(false);
-    passwordStrengthBar.setPreferredSize(new Dimension(450, 20));
-    passwordStrengthBar.setForeground(Color.PINK);
+        passwordStrengthBar.setValue(0);
+        passwordStrengthBar.setStringPainted(false);
+        passwordStrengthBar.setPreferredSize(new Dimension(450, 20));
+        passwordStrengthBar.setForeground(Color.PINK);
 
-    strengthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-    strengthLabel.setForeground(Color.WHITE);
+        strengthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        strengthLabel.setForeground(Color.WHITE);
 
-    gbc.gridy = 4;
-    gbc.gridx = 1;
-    formPanel.add(passwordStrengthBar, gbc);
+        gbc.gridy = 4;
+        gbc.gridx = 1;
+        formPanel.add(passwordStrengthBar, gbc);
 
-    gbc.gridy = 5;
-    gbc.gridx = 1;
-    formPanel.add(strengthLabel, gbc);
+        gbc.gridy = 5;
+        gbc.gridx = 1;
+        formPanel.add(strengthLabel, gbc);
 
-    // --- CONFIRM PASSWORD ---
-    JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-    confirmPasswordLabel.setFont(labelFont);
-    confirmPasswordLabel.setForeground(Color.WHITE);
-    confirmPassword.setFont(fieldFont);
-    confirmPassword.setPreferredSize(new Dimension(450, 40));
-    gbc.gridy = 6;
-    gbc.gridx = 0;
-    formPanel.add(confirmPasswordLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(confirmPassword, gbc);
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
+        confirmPasswordLabel.setFont(labelFont);
+        confirmPasswordLabel.setForeground(Color.WHITE);
+        confirmPassword.setFont(fieldFont);
+        confirmPassword.setPreferredSize(new Dimension(450, 40));
+        gbc.gridy = 6;
+        gbc.gridx = 0;
+        formPanel.add(confirmPasswordLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(confirmPassword, gbc);
 
-    // --- BUTTONS ---
-    ImageIcon signUpIcon = new ImageIcon("assets/SignUpBtn.png");
-    Image scaledSignUp = signUpIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
-    signUpButton.setIcon(new ImageIcon(scaledSignUp));
-    signUpButton.setContentAreaFilled(false);
-    signUpButton.setBorderPainted(false);
-    signUpButton.setFocusPainted(false);
+        adminCheckBox.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        adminCheckBox.setForeground(new Color(255, 215, 0));
+        adminCheckBox.setOpaque(false);
+        gbc.gridy = 7;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formPanel.add(adminCheckBox, gbc);
 
-    ImageIcon backIcon = new ImageIcon("assets/ReturnBtn.png");
-    Image scaledBack = backIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
-    backButton.setIcon(new ImageIcon(scaledBack));
-    backButton.setContentAreaFilled(false);
-    backButton.setBorderPainted(false);
-    backButton.setFocusPainted(false);
+        JLabel adminKeyLabel = new JLabel("Admin Key:");
+        adminKeyLabel.setFont(labelFont);
+        adminKeyLabel.setForeground(Color.WHITE);
+        adminKeyField.setFont(fieldFont);
+        adminKeyField.setPreferredSize(new Dimension(450, 40));
+        adminKeyLabel.setVisible(false);
+        adminKeyField.setVisible(false);
+        
+        gbc.gridy = 8;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        formPanel.add(adminKeyLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(adminKeyField, gbc);
 
-    JPanel buttonPanel = new JPanel();
-    buttonPanel.setOpaque(false);
-    buttonPanel.add(backButton);
-    buttonPanel.add(signUpButton);
+        adminCheckBox.addActionListener(e -> {
+            boolean isSelected = adminCheckBox.isSelected();
+            adminKeyLabel.setVisible(isSelected);
+            adminKeyField.setVisible(isSelected);
+            formPanel.revalidate();
+            formPanel.repaint();
+        });
 
-    gbc.gridy = 7;
-    gbc.gridx = 0;
-    gbc.gridwidth = 2;
-    gbc.anchor = GridBagConstraints.CENTER;
-    formPanel.add(buttonPanel, gbc);
+        ImageIcon signUpIcon = new ImageIcon("assets/SignUpBtn.png");
+        Image scaledSignUp = signUpIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        signUpButton.setIcon(new ImageIcon(scaledSignUp));
+        signUpButton.setContentAreaFilled(false);
+        signUpButton.setBorderPainted(false);
+        signUpButton.setFocusPainted(false);
 
-    // Add to main panel
-    mainPanel.add(formPanel);
+        ImageIcon backIcon = new ImageIcon("assets/ReturnBtn.png");
+        Image scaledBack = backIcon.getImage().getScaledInstance(200, 80, Image.SCALE_SMOOTH);
+        backButton.setIcon(new ImageIcon(scaledBack));
+        backButton.setContentAreaFilled(false);
+        backButton.setBorderPainted(false);
+        backButton.setFocusPainted(false);
 
-        // Timer for strength updates
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(backButton);
+        buttonPanel.add(signUpButton);
+
+        gbc.gridy = 9;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formPanel.add(buttonPanel, gbc);
+
+        mainPanel.add(formPanel);
+
         strengthUpdateTimer = new Timer(100, e -> updateStrength());
         strengthUpdateTimer.setRepeats(false);
 
@@ -197,9 +224,11 @@ public class signUp extends JFrame {
             String usernameText = username.getText().trim();
             String passwordText = new String(password.getPassword());
             String confirmPasswordText = new String(confirmPassword.getPassword());
+            boolean wantsAdmin = adminCheckBox.isSelected();
+            String adminKey = new String(adminKeyField.getPassword()).trim();
 
             if (emailText.isEmpty() || usernameText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -223,11 +252,27 @@ public class signUp extends JFrame {
                 return;
             }
 
+            boolean isAdmin = false;
+            if (wantsAdmin) {
+                if (adminKey.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter the admin key.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!adminKey.equals(ADMIN_SECRET_KEY)) {
+                    JOptionPane.showMessageDialog(this, "Invalid admin key.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                isAdmin = true;
+            }
+
             String hashedPassword = hashPassword(passwordText);
-            boolean success = FirebaseConnection.sendData(emailText, usernameText, hashedPassword);
+            boolean success = FirebaseConnection.sendData(emailText, usernameText, hashedPassword, isAdmin);
 
             if (success) {
-                JOptionPane.showMessageDialog(this, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                String successMessage = isAdmin ? 
+                    "Admin Account Created Successfully!" : 
+                    "Sign Up Successful!";
+                JOptionPane.showMessageDialog(this, successMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
                 new login().setVisible(true);
                 dispose();
             } else {
