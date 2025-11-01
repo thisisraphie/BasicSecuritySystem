@@ -23,16 +23,13 @@ public class login extends JFrame {
         Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
         Font fieldFont = new Font("Segoe UI", Font.PLAIN, 22);
 
-        // Background panel
         JPanel bgPanel = new JPanel(new BorderLayout());
         bgPanel.setBackground(Color.WHITE);
         setContentPane(bgPanel);
 
-        // Centering panel
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
 
-        // Form panel (blue rounded box)
         JPanel formPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -56,13 +53,11 @@ public class login extends JFrame {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
 
-        // Title
         JLabel loginLabel = new JLabel("Login", SwingConstants.CENTER);
         loginLabel.setFont(new Font("Segoe UI", Font.BOLD, 40));
         loginLabel.setForeground(Color.WHITE);
         formPanel.add(loginLabel, gbc);
 
-        // Username
         gbc.gridy++;
         gbc.gridwidth = 1;
         JLabel usernameLabel = new JLabel("Username:");
@@ -76,7 +71,6 @@ public class login extends JFrame {
         usernameField.setPreferredSize(new Dimension(400, 30));
         formPanel.add(usernameField, gbc);
 
-        // Password
         gbc.gridx = 0;
         gbc.gridy++;
         JLabel passwordLabel = new JLabel("Password:");
@@ -90,7 +84,6 @@ public class login extends JFrame {
         passwordField.setPreferredSize(new Dimension(400, 30));
         formPanel.add(passwordField, gbc);
 
-        // Buttons
         gbc.gridy++;
         gbc.gridx = 0;
         backButton = new JButton();
@@ -108,13 +101,11 @@ public class login extends JFrame {
         styleButton(loginButton);
         formPanel.add(loginButton, gbc);
 
-        // Add form panel to main panel
         GridBagConstraints mainGbc = new GridBagConstraints();
         mainGbc.gridx = 0;
         mainGbc.gridy = 0;
         panel.add(formPanel, mainGbc);
         bgPanel.add(panel, BorderLayout.CENTER);
-
 
         backButton.addActionListener(e -> {
             if (mainMenu != null) {
@@ -145,12 +136,14 @@ public class login extends JFrame {
 
         FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
             @Override
-            public void onSuccess(String email, String storedHash) {
+            public void onSuccess(String email, String storedHash, boolean isAdmin) {
                 String inputHash = hashPassword(password);
                 if (inputHash.equals(storedHash)) {
-                    JOptionPane.showMessageDialog(login.this, "Login Successful!");
+                    String roleMessage = isAdmin ? "Welcome Admin!" : "Login Successful!";
+                    JOptionPane.showMessageDialog(login.this, roleMessage);
                     failedAttempts = 0;
-                    Landing landingPage = new Landing();
+                    
+                    Landing landingPage = new Landing(username, isAdmin);
                     dispose();
                     landingPage.setVisible(true);
                 } else {
