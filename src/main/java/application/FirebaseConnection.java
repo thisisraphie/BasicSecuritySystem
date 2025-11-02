@@ -1,0 +1,107 @@
+package application;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public class FirebaseConnection {
+
+    private static final String DATABASE_URL =
+        "https://basicsecuritysystemdb-default-rtdb.asia-southeast1.firebasedatabase.app/users.json";
+
+    private static final HttpClient httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
+    public static boolean sendData(String email, String username, String password) {
+        try {
+            String json = String.format(
+                "{\"email\":\"%s\",\"username\":\"%s\",\"password\":\"%s\"}",
+                email, username, password
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(DATABASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+            HttpResponse<String> response = httpClient.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() / 100 == 2;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean usernameExists(String username) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(DATABASE_URL))
+                .GET()
+                .build();
+
+            HttpResponse<String> response = httpClient.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+            
+            String responseBody = response.body();
+            if (responseBody == null || responseBody.equals("null") || responseBody.isEmpty()) {
+                return false;
+            }
+
+            return responseBody.contains("\"username\":\"" + username + "\"");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public interface OnUserFetchListener {
+        void onSuccess(String username, String hashedPassword);
+        void onFailure(String errorMessage);
+    }
+
+    public static void getUser(String username, OnUserFetchListener listener) {
+        httpClient.sendAsync(
+            HttpRequest.newBuilder()
+                .uri(URI.create(DATABASE_URL))
+                .GET()
+                .build(),
+            HttpResponse.BodyHandlers.ofString()
+        ).thenAccept(response -> {
+            String responseBody = response.body();
+            if (responseBody == null || responseBody.equals("null") || responseBody.isEmpty()) {
+                listener.onFailure("No users found");
+                return;
+            }
+
+            if (responseBody.contains("\"username\":\"" + username + "\"")) {
+                int userIndex = responseBody.indexOf("\"username\":\"" + username + "\"");
+                int objectStart = responseBody.lastIndexOf("{", userIndex);
+                int objectEnd = responseBody.indexOf("}", userIndex);
+
+                if (objectStart != -1 && objectEnd != -1) {
+                    String userJson = responseBody.substring(objectStart, objectEnd + 1);
+                    int passStart = userJson.indexOf("\"password\":\"") + 12;
+                    int passEnd = userJson.indexOf("\"", passStart);
+                    String hashedPassword = userJson.substring(passStart, passEnd);
+
+                    listener.onSuccess(username, hashedPassword);
+                } else {
+                    listener.onFailure("Invalid user data structure");
+                }
+            } else {
+                listener.onFailure("User not found");
+            }
+        }).exceptionally(e -> {
+            e.printStackTrace();
+            listener.onFailure(e.getMessage());
+            return null;
+        });
+    }
+}
+

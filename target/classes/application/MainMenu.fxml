@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="application.MainMenuController"
+            prefWidth="600" prefHeight="400">
+    
+    <children>
+        <Label text="Basic Security System"
+               layoutX="180" layoutY="60">
+            <font>
+                <Font size="24"/>
+            </font>
+        </Label>
+
+        <Button text="Login"
+                layoutX="250" layoutY="150"
+                prefWidth="100"
+                onAction="#handleLogin"/>
+
+        <Button text="SignUp"
+                layoutX="250" layoutY="200"
+                prefWidth="100"
+                onAction="#handleSignUp"/>
+
+        <Button text="Exit"
+                layoutX="250" layoutY="250"
+                prefWidth="100"
+                onAction="#handleExit"/>
+    </children>
+</AnchorPane>

@@ -1,0 +1,8 @@
+application\LoginController.class
+application\FirebaseConnection.class
+module-info.class
+application\SignUpController.class
+application\MainMenuController.class
+application\FirebaseConnection$OnUserFetchListener.class
+application\MainMenu.class
+application\Launcher.class
