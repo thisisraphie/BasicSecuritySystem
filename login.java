@@ -144,33 +144,43 @@ public class login extends JFrame {
         }
 
         FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
-            @Override
-            public void onSuccess(String email, String storedHash) {
-                String inputHash = hashPassword(password);
-                if (inputHash.equals(storedHash)) {
+        @Override
+        public void onSuccess(String email, String storedHash) {
+            String inputHash = hashPassword(password);
+            if (inputHash.equals(storedHash)) {
+                SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(login.this, "Login Successful!");
                     failedAttempts = 0;
                     Landing landingPage = new Landing();
                     dispose();
                     landingPage.setVisible(true);
-                } else {
+                });
+                SystemLogger.logInfo("User " + username + " logged in successfully.");
+            } else {
+                SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(login.this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
-                    handleFailedLogin();
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                JOptionPane.showMessageDialog(login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+                });
+                SystemLogger.logWarning("Failed login attempt for user " + username);
                 handleFailedLogin();
             }
+        }
+
+        @Override
+        public void onFailure(String error) {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(login.this, "User not found or error: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+            });
+            SystemLogger.logWarning("Failed login attempt for user " + username);
+            handleFailedLogin();
+        }
         });
     }
 
     private void handleFailedLogin() {
         failedAttempts++;
+        SystemLogger.logWarning("Failed login attempt, count: " + failedAttempts);
         if (failedAttempts >= 5) {
-            freezeUI();
+            SwingUtilities.invokeLater(() -> freezeUI());
         }
     }
 
@@ -179,12 +189,13 @@ public class login extends JFrame {
         passwordField.setEnabled(false);
         loginButton.setEnabled(false);
         backButton.setEnabled(false);
-
-        JOptionPane.showMessageDialog(login.this,
-                "Too many failed attempts. Locked for 30 seconds.",
-                "Locked",
-                JOptionPane.WARNING_MESSAGE);
-
+        SystemLogger.logWarning("UI frozen due to too many failed attempts.");
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(login.this,
+                    "Too many failed attempts. Locked for 30 seconds.",
+                    "Locked",
+                    JOptionPane.WARNING_MESSAGE);
+        });
         Timer unfreezeTimer = new Timer(30000, e -> unfreezeUI());
         unfreezeTimer.setRepeats(false);
         unfreezeTimer.start();
@@ -196,6 +207,7 @@ public class login extends JFrame {
         loginButton.setEnabled(true);
         backButton.setEnabled(true);
         failedAttempts = 0;
+        SystemLogger.logInfo("UI unfrozen.");
     }
 
     private String hashPassword(String password) {

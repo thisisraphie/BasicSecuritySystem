@@ -27,7 +27,7 @@ public class signUp extends JFrame {
    public signUp() {
     setTitle("Sign Up");
     setExtendedState(JFrame.MAXIMIZED_BOTH);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setLocationRelativeTo(null);
 
     Font labelFont = new Font("Segoe UI", Font.BOLD, 25);
@@ -250,19 +250,15 @@ public class signUp extends JFrame {
         int score = getStrengthScore(pwd);
         passwordStrengthBar.setValue(score);
 
-        switch (score) {
-            case 0, 1 -> {
-                passwordStrengthBar.setForeground(new Color(224, 107, 128));
-                strengthLabel.setText("Strength: Weak");
-            }
-            case 2, 3 -> {
-                passwordStrengthBar.setForeground(new Color(255, 231, 151));
-                strengthLabel.setText("Strength: Moderate");
-            }
-            case 4 -> {
-                passwordStrengthBar.setForeground(new Color(132, 153, 79));
-                strengthLabel.setText("Strength: Strong");
-            }
+        if (score == 0 || score == 1) {
+            passwordStrengthBar.setForeground(new Color(224, 107, 128));
+            strengthLabel.setText("Strength: Weak");
+        } else if (score == 2 || score == 3) {
+            passwordStrengthBar.setForeground(new Color(255, 231, 151));
+            strengthLabel.setText("Strength: Moderate");
+        } else if (score == 4) {
+            passwordStrengthBar.setForeground(new Color(132, 153, 79));
+            strengthLabel.setText("Strength: Strong");
         }
     }
 
