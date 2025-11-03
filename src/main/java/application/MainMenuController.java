@@ -26,6 +26,7 @@ public class MainMenuController {
 
             stage.setScene(new Scene(root));
             stage.setTitle("Login");
+            stage.setFullScreen(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,6 +43,7 @@ public class MainMenuController {
 
             stage.setScene(new Scene(root));
             stage.setTitle("Sign Up");
+            stage.setFullScreen(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -27,6 +27,8 @@ public class SignUpController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.setTitle("Sign Up");
+        this.stage.setFullScreen(true);
     }
 
     @FXML

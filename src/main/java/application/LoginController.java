@@ -8,12 +8,17 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML private TextField usernameField;
+    @FXML private TextField email;
     @FXML private PasswordField passwordField;
+    @FXML private PasswordField ConfirmPasswordField;
 
     private Stage stage;
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.setTitle("Login");
+        this.stage.setFullScreen(true);
+        
     }
 
     @FXML
