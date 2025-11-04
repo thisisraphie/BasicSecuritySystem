@@ -16,7 +16,7 @@ public class MainMenu extends Application {
             MainMenuController controller = loader.getController();
             controller.setStage(stage);
 
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 600, 600);
 
             scene.getStylesheets().add(getClass().getResource("/application/styles.css").toExternalForm());
 
@@ -27,15 +27,11 @@ public class MainMenu extends Application {
             stage.setTitle("Main Menu");
             stage.setScene(scene);
             stage.setMinWidth(600);
-            stage.setMinHeight(400);
+            stage.setMinHeight(600);
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

@@ -120,7 +120,7 @@ public class SignUpController implements Initializable {
             MainMenuController controller = loader.getController();
             controller.setStage(stage);
 
-            Scene scene = new Scene(root, Math.max(360, stage.getWidth()), Math.max(600, stage.getHeight()));
+            Scene scene = new Scene(root, Math.max(360, stage.getWidth()), Math.max(600, 1200));
             scene.getStylesheets().add(getClass().getResource("/application/styles.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("Main Menu");

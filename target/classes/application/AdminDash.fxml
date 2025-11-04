@@ -18,25 +18,25 @@
 
         <HBox alignment="CENTER" spacing="24.0">
 
+            <!-- User Form -->
             <VBox spacing="12.0" alignment="CENTER" maxWidth="360.0" styleClass="form-card">
                 <Label text="User Management" styleClass="form-label" />
                 <TextField fx:id="usernameField" promptText="Username" styleClass="signup-input" />
                 <TextField fx:id="emailField" promptText="Email" styleClass="signup-input" />
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="signup-input" />
                 <HBox alignment="CENTER" spacing="12.0">
-                    <Button text="Add User" prefWidth="100.0" styleClass="signup-button" onAction="#handleAddUser" />
-                    <Button text="Remove" prefWidth="100.0" styleClass="signup-button" onAction="#handleRemoveUser" />
+                    <Button fx:id="addButton" text="Add User" prefWidth="100.0" styleClass="signup-button" onAction="#handleAddUser" />
+                    <Button fx:id="removeButton" text="Remove" prefWidth="100.0" styleClass="signup-button" onAction="#handleRemoveUser" />
                 </HBox>
-                <Button text="Toggle Admin" prefWidth="220.0" styleClass="signup-button" onAction="#handleToggleAdmin" />
+                <Button fx:id="toggleButton" text="Toggle Admin" prefWidth="220.0" styleClass="signup-button" onAction="#handleToggleAdmin" />
             </VBox>
 
+            <!-- Existing Users List -->
             <VBox spacing="12.0" alignment="CENTER" maxWidth="360.0" styleClass="form-card">
-                <Label text="Sample File Creation" styleClass="form-label" />
-                <TextField fx:id="fileNameField" promptText="File Name" styleClass="signup-input" />
-                <HBox alignment="CENTER" spacing="12.0">
-                    <Button text="Generate File" prefWidth="100.0" styleClass="signup-button" onAction="#handleGenerateSample" />
-                    <Button text="Decrypt File" prefWidth="100.0" styleClass="signup-button" onAction="#handleDecrypt" />
-                </HBox>
+                <Label text="Existing Users" styleClass="form-label"/>
+                <ListView fx:id="userList" prefWidth="300.0" prefHeight="300.0"/>
             </VBox>
+
         </HBox>
 
         <VBox spacing="20.0" alignment="CENTER">

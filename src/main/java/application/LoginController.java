@@ -17,11 +17,12 @@ public class LoginController {
     @FXML private PasswordField passwordField;
 
     private Stage stage;
+    private int failedAttempts = 0; // counter for failed logins
+    private static final int MAX_ATTEMPTS = 5;
 
     public void setStage(Stage stage) {
         this.stage = stage;
         this.stage.setTitle("Login");
-        
     }
 
     @FXML
@@ -41,20 +42,39 @@ public class LoginController {
                     String inputHash = hashPassword(password);
                     Platform.runLater(() -> {
                         if (inputHash.equals(storedHash)) {
+                            failedAttempts = 0; // reset on success
                             showSuccess("Login Successful!");
                             handleLoginSuccess(email, isAdmin);
                         } else {
-                            showError("Incorrect password.");
+                            failedAttempts++;
+                            checkAttempts();
                         }
                     });
                 }
 
                 @Override
                 public void onFailure(String error) {
-                    Platform.runLater(() -> showError("User not found or error: " + error));
+                    Platform.runLater(() -> {
+                        failedAttempts++;
+                        checkAttempts();
+                    });
                 }
             });
         }).start();
+    }
+
+    private void checkAttempts() {
+        if (failedAttempts >= MAX_ATTEMPTS) {
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "You have tried too many attempts. Terminating this session.",
+                    ButtonType.OK);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            Platform.exit(); // terminate program
+        } else {
+            showError("Incorrect username or password. Attempt " + failedAttempts + " of " + MAX_ATTEMPTS + ".");
+        }
     }
 
     @FXML
@@ -64,7 +84,6 @@ public class LoginController {
             javafx.scene.Parent root = loader.load();
 
             root.getStyleClass().add("dark");
-            
 
             Object controller = loader.getController();
             try {
