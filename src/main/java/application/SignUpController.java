@@ -34,7 +34,6 @@ public class SignUpController implements Initializable {
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
 
-    // New UI elements for strength checking
     @FXML private ProgressBar pwdStrengthBar;
     @FXML private Label pwdStrengthLabel;
 
@@ -45,7 +44,6 @@ public class SignUpController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // friendly placeholders and initial focus
         emailField.setPromptText("name@example.com");
         usernameField.setPromptText("choose a username");
         passwordField.setPromptText("at least 4 characters");
@@ -53,7 +51,6 @@ public class SignUpController implements Initializable {
 
         Platform.runLater(() -> emailField.requestFocus());
 
-        // Listen for password changes and update strength
         passwordField.textProperty().addListener((obs, oldVal, newVal) -> updatePasswordStrength(newVal));
     }
 
@@ -64,7 +61,6 @@ public class SignUpController implements Initializable {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        // Basic validation
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showAlert(AlertType.ERROR, "Validation Error", "Please fill in all fields.");
             return;
@@ -85,11 +81,6 @@ public class SignUpController implements Initializable {
             return;
         }
 
-        // Optional: you can require stronger password by checking score here
-        // int score = getStrengthScore(password);
-        // if (score < 1) { ... }
-
-        // Network calls off the FX thread
         new Thread(() -> {
             try {
                 if (FirebaseConnection.usernameExists(username)) {
@@ -121,7 +112,6 @@ public class SignUpController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/MainMenu.fxml"));
             Parent root = loader.load();
 
-            // preserve theme
             if (stage != null && stage.getScene() != null && stage.getScene().getRoot() != null) {
                 if (stage.getScene().getRoot().getStyleClass().contains("light")) root.getStyleClass().add("light");
                 else root.getStyleClass().add("dark");
@@ -135,7 +125,6 @@ public class SignUpController implements Initializable {
             stage.setScene(scene);
             stage.setTitle("Main Menu");
 
-            // restore saved previous size if any
             if (stage != null && stage.getProperties().containsKey("prevWidth") && stage.getProperties().containsKey("prevHeight")) {
                 Object pw = stage.getProperties().remove("prevWidth");
                 Object ph = stage.getProperties().remove("prevHeight");
@@ -176,14 +165,12 @@ public class SignUpController implements Initializable {
         }
     }
 
-    // ---------- password strength logic ----------
 
     private void updatePasswordStrength(String pwd) {
         int score = getStrengthScore(pwd); // 0..4
         double progress = (double) score / 4.0;
         pwdStrengthBar.setProgress(progress);
 
-        // update label text and colors
         switch (score) {
             case 0, 1 -> {
                 pwdStrengthLabel.setText("Weak");

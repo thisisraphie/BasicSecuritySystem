@@ -18,21 +18,18 @@
     <VBox alignment="TOP_CENTER" spacing="18">
         <VBox prefHeight="36"/>
 
-        <!-- Title -->
         <Label text="Basic Security System"
                styleClass="title title-center"
                style="-fx-text-fill: #F7FBFF; -fx-font-size: 28px; -fx-font-weight: 700;" />
 
-        <!-- Logged in label -->
         <Label fx:id="loggedInLabel"
                text=""
                visible="false"
                style="-fx-text-fill: #F7FBFF; -fx-font-size: 14px;"/>
 
-        <!-- Main button card -->
         <StackPane styleClass="rect-card" prefWidth="360" prefHeight="280">
             <HBox spacing="16" alignment="CENTER" prefWidth="320">
-                <!-- Always visible -->
+
                 <Button fx:id="loginButton" onAction="#handleLogin" styleClass="rect-button" text="Login" contentDisplay="TOP"
                         prefWidth="180">
                     <graphic>
@@ -59,7 +56,6 @@
                     </HBox.hgrow>
                 </Button>
 
-                <!-- Appears when logged in -->
                 <Button fx:id="fileEncryptButton" onAction="#handleFileEncrypt" styleClass="rect-button" text="File Encrypt" 
                         contentDisplay="TOP" visible="false" prefWidth="180">
                     <graphic>
@@ -73,7 +69,6 @@
                     </HBox.hgrow>
                 </Button>
 
-                <!-- Admin users only -->
                 <Button fx:id="adminButton" onAction="#handleAdmin" styleClass="rect-button" text="Admin" contentDisplay="TOP" 
                         visible="false" prefWidth="180">
                     <graphic>

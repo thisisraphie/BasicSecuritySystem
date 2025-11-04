@@ -48,10 +48,7 @@ public class FileEncryptController {
 
     @FXML
     private void handleDecrypt(ActionEvent event) {
-        // Determine the encrypted file to decrypt.
-        // If a file is already selected and it ends with .enc, use it.
-        // If a non-.enc file is selected, prefer the corresponding file in ./generated/<name>.enc if it exists.
-        // Otherwise prompt the user to pick a .enc file.
+
         File file = null;
         if (selectedFile != null) {
             if (selectedFile.getName().toLowerCase().endsWith(".enc")) {
@@ -76,7 +73,7 @@ public class FileEncryptController {
             }
         }
 
-        // Prompt for password
+
         Dialog<String> pwdDialog = new Dialog<>();
         pwdDialog.setTitle("Enter password");
         pwdDialog.setHeaderText("Enter the password used to encrypt the file");
@@ -139,7 +136,6 @@ public class FileEncryptController {
             return;
         }
 
-        // Prompt for password using a secure PasswordField dialog
         Dialog<String> pwdDialog = new Dialog<>();
         pwdDialog.setTitle("Enter password");
         pwdDialog.setHeaderText("Enter a password to encrypt the file");
@@ -156,7 +152,6 @@ public class FileEncryptController {
         grid.add(pf, 1, 0);
         pwdDialog.getDialogPane().setContent(grid);
 
-        // Convert result
         pwdDialog.setResultConverter(button -> {
             if (button == okButton) return pf.getText();
             return null;
@@ -175,16 +170,14 @@ public class FileEncryptController {
 
             byte[] input = Files.readAllBytes(selectedFile.toPath());
 
-            // Parameters
             SecureRandom rnd = new SecureRandom();
             byte[] salt = new byte[16];
             rnd.nextBytes(salt);
-            byte[] iv = new byte[12]; // GCM recommended 12 bytes
+            byte[] iv = new byte[12];
             rnd.nextBytes(iv);
 
-            // Derive key with PBKDF2
             int iterations = 65536;
-            int keyLen = 128; // bits
+            int keyLen = 128;
             PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLen);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] keyBytes = skf.generateSecret(spec).getEncoded();
@@ -195,8 +188,6 @@ public class FileEncryptController {
             cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
             byte[] cipherText = cipher.doFinal(input);
 
-            // Write out: [salt(16)][iv(12)][ciphertext]
-            // Save into a generated/ folder inside the project working directory
             Path outPath = Path.of(System.getProperty("user.dir"), "generated", selectedFile.getName() + ".enc");
             Files.createDirectories(outPath.getParent());
             byte[] outBytes = new byte[salt.length + iv.length + cipherText.length];

@@ -16,13 +16,10 @@
               AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-            <!-- Page Title -->
             <Label text="Welcome Back" styleClass="title" />
 
-            <!-- Glass Card -->
             <VBox alignment="CENTER" spacing="18" styleClass="form-card">
 
-                <!-- Username -->
                 <VBox spacing="6" alignment="CENTER_LEFT" prefWidth="320">
                     <Label text="Username" styleClass="form-label"/>
                     <TextField fx:id="usernameField"
@@ -30,7 +27,6 @@
                                styleClass="signup-input"/>
                 </VBox>
 
-                <!-- Password -->
                 <VBox spacing="6" alignment="CENTER_LEFT" prefWidth="320">
                     <Label text="Password" styleClass="form-label"/>
                     <PasswordField fx:id="passwordField"
@@ -38,7 +34,7 @@
                                    styleClass="signup-input"/>
                 </VBox>
 
-                <!-- Buttons -->
+
                 <HBox spacing="16" alignment="CENTER">
                     <Button text="Login" onAction="#handleLogin" styleClass="signup-button"/>
                     <Button text="Return" onAction="#handleBack" styleClass="glass-button"/>

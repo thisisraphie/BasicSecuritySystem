@@ -17,7 +17,6 @@
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <VBox prefHeight="40.0"/>
 
-        <!-- Title: larger and high contrast -->
         <Label text="Create an account" styleClass="title" />
 
         <VBox alignment="CENTER" spacing="12.0" maxWidth="360.0" styleClass="form-card">
@@ -36,7 +35,6 @@
                 <PasswordField fx:id="passwordField" prefWidth="320.0" prefHeight="44.0" styleClass="signup-input" />
             </VBox>
 
-            <!-- Strength bar and label -->
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                 <ProgressBar fx:id="pwdStrengthBar" prefWidth="280.0" prefHeight="14.0" progress="0.0" />
                 <Label fx:id="pwdStrengthLabel" text=" " style="-fx-font-weight:600;" />

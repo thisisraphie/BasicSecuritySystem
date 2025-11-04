@@ -34,7 +34,6 @@ public class LoginController {
             return;
         }
 
-        // Hash password and check Firebase in background
         new Thread(() -> {
             FirebaseConnection.getUser(username, new FirebaseConnection.OnUserFetchListener() {
                 @Override
@@ -64,7 +63,6 @@ public class LoginController {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/application/MainMenu.fxml"));
             javafx.scene.Parent root = loader.load();
 
-            // preserve theme from current root
             root.getStyleClass().add("dark");
             
 

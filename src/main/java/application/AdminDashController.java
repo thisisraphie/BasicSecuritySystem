@@ -72,7 +72,6 @@ public class AdminDashController {
             java.io.File file = chooser.showOpenDialog(stage);
             if (file == null) return;
 
-            // Prompt for password
             Dialog<String> pwdDialog = new Dialog<>();
             pwdDialog.setTitle("Enter password");
             pwdDialog.setHeaderText("Enter the password used to encrypt the file");
@@ -108,7 +107,6 @@ public class AdminDashController {
     @FXML
     private void handleReturn(ActionEvent event) {
         try {
-            // Use stored stage if available; otherwise derive it from the event source to avoid NPE
             Stage targetStage = this.stage;
             if (targetStage == null) {
                 Object src = event.getSource();
@@ -132,14 +130,12 @@ public class AdminDashController {
                 } catch (Exception ignored) {}
             }
 
-            // Ensure dark theme class is present (some load paths add it elsewhere)
             if (!root.getStyleClass().contains("dark")) {
                 root.getStyleClass().add("dark");
             }
 
-            // Use the original MainMenu dimensions so returning restores the same size
             Scene scene = new Scene(root, 600, 400);
-            // Re-attach stylesheet to the new scene so theme rules apply
+
             String ss = getClass().getResource("/application/styles.css").toExternalForm();
             if (!scene.getStylesheets().contains(ss)) scene.getStylesheets().add(ss);
             targetStage.setScene(scene);

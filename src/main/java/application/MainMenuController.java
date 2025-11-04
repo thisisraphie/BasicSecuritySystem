@@ -97,7 +97,6 @@ public class MainMenuController {
 
     @FXML
     private void handleLogin(ActionEvent e) {
-        // If already logged in, warn the user that continuing will log them out
         if (currentUserEmail != null) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "You are currently logged in as: " + currentUserEmail + (isAdmin ? " - Admin" : "") +
@@ -108,7 +107,6 @@ public class MainMenuController {
             confirm.setTitle("Confirm Log Out");
             confirm.showAndWait().ifPresent(btn -> {
                 if (btn == ButtonType.YES) {
-                    // perform logout and go to login
                     currentUserEmail = null;
                     isAdmin = false;
                     if (loggedInLabel != null) loggedInLabel.setVisible(false);
@@ -123,7 +121,6 @@ public class MainMenuController {
 
     @FXML
     private void handleSignUp(ActionEvent e) {
-        // If already logged in, warn the user that continuing will log them out
         if (currentUserEmail != null) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "You are currently logged in as: " + currentUserEmail + (isAdmin ? " - Admin" : "") +
@@ -134,7 +131,6 @@ public class MainMenuController {
             confirm.setTitle("Confirm Log Out");
             confirm.showAndWait().ifPresent(btn -> {
                 if (btn == ButtonType.YES) {
-                    // perform logout and go to sign up
                     currentUserEmail = null;
                     isAdmin = false;
                     if (loggedInLabel != null) loggedInLabel.setVisible(false);
@@ -184,7 +180,6 @@ public class MainMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Apply consistent dark theme every time
             root.getStyleClass().add("dark");
             root.getStylesheets().add(getClass().getResource("/application/styles.css").toExternalForm());
 
@@ -206,7 +201,6 @@ public class MainMenuController {
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
             }
 
-            // Prefer a scene size specified by the FXML root pref size when available
             double prefW = root.prefWidth(-1);
             double prefH = root.prefHeight(-1);
             double sceneW = prefW > 0 ? prefW : Math.max(360, stage.getWidth());
