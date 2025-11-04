@@ -1,0 +1,242 @@
+.root {
+    -fx-font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 400;
+    -fx-padding: 18;
+}
+
+.root, .root * {
+    -fx-font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.root.dark {
+    -fx-background-color: linear-gradient(to bottom, #071017 0%, #08121a 50%, #041018 100%);
+}
+
+.root.dark .title {
+    -fx-font-size: 26px;
+    -fx-text-fill: #F7FBFF;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 0.2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.65), 10, 0.25, 0, 3);
+}
+
+.root.dark .card {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-radius: 12;
+    -fx-padding: 18 22;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 18, 0.3, 0, 6);
+}
+
+.root.dark .glass-button {
+    -fx-font-size: 15px;
+    -fx-text-fill: #eaf3ff;
+    -fx-min-width: 300px;
+    -fx-padding: 12 18;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-background-insets: 0, 1;
+    -fx-background-color: linear-gradient(rgba(255,255,255,0.06), rgba(255,255,255,0.02)), rgba(255,255,255,0.03);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 6, 0.2, 0, 2);
+    -fx-cursor: hand;
+}
+
+.root.dark .glass-button:hover { -fx-translateY: -3; -fx-opacity: 1; }
+.root.dark .glass-button:pressed { -fx-translateY: 0; }
+
+.input-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-pref-width: 320px;
+}
+
+.title-center { -fx-alignment: CENTER; -fx-padding: 10 0 22 0; }
+
+.theme-toggle {
+    -fx-background-radius: 16;
+    -fx-padding: 6 10;
+    -fx-font-size: 12px;
+}
+
+.rect-card {
+    -fx-background-color: rgba(255,255,255,0.02);
+    -fx-background-radius: 4;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.25, 0, 6);
+    -fx-alignment: center;
+}
+
+.rect-button {
+    -fx-background-color: linear-gradient(#0f2a3a, #09202a);
+    -fx-text-fill: #eaf3ff;
+    -fx-font-size: 13px;
+    -fx-min-width: 90px;
+    -fx-min-height: 160px;
+    -fx-padding: 12 10;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-width: 1;
+    -fx-alignment: center;
+    -fx-content-display: top;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 6, 0.15, 0, 4);
+}
+
+.rect-button:hover {
+    -fx-translateY: -6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 18, 0.25, 0, 8);
+    -fx-background-color: linear-gradient(#133b52, #0b2d3a);
+}
+
+.rect-button:pressed {
+    -fx-translateY: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 6, 0.15, 0, 3);
+    -fx-background-color: linear-gradient(#081e28, #06171f);
+}
+
+.placeholder-rect {
+    -fx-fill: linear-gradient(#28343a, #1b262b);
+    -fx-width: 84px;
+    -fx-height: 84px;
+}
+
+.icon-label {
+    -fx-font-size: 32px;
+    -fx-text-fill: rgba(234,243,255,0.95);
+}
+
+.rect-button .label {
+    -fx-padding: 10 0 0 0;
+}
+
+.small-exit {
+    -fx-min-width: 120px;
+    -fx-padding: 8 12;
+}
+
+#exitButton {
+    -fx-background-color: linear-gradient(#ff6b6b, #e63946);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-font-size: 15px;
+    -fx-min-width: 160px;
+    -fx-min-height: 44px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 4;
+    -fx-border-color: rgba(0,0,0,0.12);
+    -fx-effect: dropshadow(gaussian, rgba(230,57,70,0.25), 8, 0.2, 0, 4);
+}
+
+#exitButton:hover {
+    -fx-background-color: linear-gradient(#ff7a7a, #ea4b4b);
+    -fx-translateY: -2;
+}
+
+#exitButton:pressed {
+    -fx-translateY: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 4, 0.1, 0, 2);
+}
+
+.signup-screen,
+.signup-screen * {
+    -fx-font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 15px;
+}
+
+.signup-screen .title {
+    -fx-font-size: 22px;
+    -fx-text-fill: rgba(247,251,255,0.98);
+    -fx-font-weight: 800;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 6, 0.15, 0, 2);
+}
+
+.signup-screen .form-card {
+    -fx-background-color: rgba(255,255,255,0.02);
+    -fx-background-radius: 10px;
+    -fx-padding: 18 20;
+    -fx-spacing: 12;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.2, 0, 6);
+}
+
+.signup-screen .form-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: rgba(230,240,255,0.92);
+    -fx-padding: 2 0 4 0;
+}
+
+.signup-screen .hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255,255,255,0.65);
+    -fx-padding: 6 0 0 0;
+}
+
+.signup-screen TextField,
+.signup-screen PasswordField,
+.signup-screen .signup-input {
+    -fx-font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(246,249,255,0.98);
+    -fx-prompt-text-fill: rgba(255,255,255,0.45);
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-insets: 0;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-width: 1px;
+    -fx-padding: 8 10;
+    -fx-pref-height: 44px;
+}
+
+.signup-screen PasswordField {
+    -fx-display-caret: true;
+}
+
+.signup-screen TextField:focused,
+.signup-screen PasswordField:focused {
+    -fx-border-color: rgba(99,102,241,0.85);
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.08), 8, 0.08, 0, 0);
+}
+
+.signup-screen .signup-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(#2e6fb8, #1f4f86);
+    -fx-background-radius: 6px;
+    -fx-pref-height: 44px;
+    -fx-pref-width: 150px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 8, 0.1, 0, 3);
+}
+
+.signup-screen .signup-button:hover {
+    -fx-translateY: -3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.40), 14, 0.2, 0, 6);
+}
+.signup-screen .signup-button:pressed {
+    -fx-translateY: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 6, 0.1, 0, 3);
+}
+
+.signup-screen ProgressBar {
+    -fx-accent: #ff5c5c;
+    -fx-pref-height: 14px;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 0;
+}
+
+.signup-screen HBox > ProgressBar {
+    -fx-pref-width: 280px;
+}
+
+.signup-screen #pwdStrengthLabel {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255,255,255,0.90);
+    -fx-min-width: 70px;
+}

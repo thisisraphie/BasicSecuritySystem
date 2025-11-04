@@ -16,12 +16,28 @@ public class MainMenu extends Application {
             MainMenuController controller = loader.getController();
             controller.setStage(stage);
 
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 600, 400);
+
+            // Apply the stylesheet first
+            scene.getStylesheets().add(getClass().getResource("/application/styles.css").toExternalForm());
+
+            // Add dark theme to the root (this fixes the white background on launch)
+            if (!root.getStyleClass().contains("dark")) {
+                root.getStyleClass().add("dark");
+            }
+
             stage.setTitle("Main Menu");
             stage.setScene(scene);
+            stage.setMinWidth(600);
+            stage.setMinHeight(400);
+            stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

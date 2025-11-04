@@ -16,11 +16,11 @@ public class FirebaseConnection {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
-    public static boolean sendData(String email, String username, String password) {
+        public static boolean sendData(String email, String username, String password, boolean isAdmin) {
         try {
             String json = String.format(
-                "{\"email\":\"%s\",\"username\":\"%s\",\"password\":\"%s\"}",
-                email, username, password
+                "{\"email\":\"%s\",\"username\":\"%s\",\"password\":\"%s\",\"isAdmin\":%b}",
+                email, username, password, isAdmin
             );
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -29,7 +29,7 @@ public class FirebaseConnection {
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
-            HttpResponse<String> response = httpClient.send(request, 
+            HttpResponse<String> response = httpClient.send(request,
                 HttpResponse.BodyHandlers.ofString());
 
             return response.statusCode() / 100 == 2;
@@ -38,6 +38,7 @@ public class FirebaseConnection {
             return false;
         }
     }
+
 
     public static boolean usernameExists(String username) {
         try {
@@ -61,7 +62,7 @@ public class FirebaseConnection {
         }
     }
     public interface OnUserFetchListener {
-        void onSuccess(String username, String hashedPassword);
+        void onSuccess(String username, String hashedPassword, boolean isAdmin);
         void onFailure(String errorMessage);
     }
 
@@ -90,7 +91,8 @@ public class FirebaseConnection {
                     int passEnd = userJson.indexOf("\"", passStart);
                     String hashedPassword = userJson.substring(passStart, passEnd);
 
-                    listener.onSuccess(username, hashedPassword);
+                    boolean isAdmin = userJson.contains("\"isAdmin\":true");
+                    listener.onSuccess(username, hashedPassword, isAdmin);
                 } else {
                     listener.onFailure("Invalid user data structure");
                 }
